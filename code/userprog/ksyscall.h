@@ -1,0 +1,195 @@
+/**************************************************************
+ *
+ * userprog/ksyscall.h
+ *
+ * Kernel interface for systemcalls 
+ *
+ * by Marcus Voelp  (c) Universitaet Karlsruhe
+ *
+ **************************************************************/
+
+#ifndef __USERPROG_KSYSCALL_H__ 
+#define __USERPROG_KSYSCALL_H__ 
+
+#include "kernel.h"
+#include "synchconsole.h"
+#include "limits.h"
+#include "machine.h"
+#include <bitset>
+
+
+void SysHalt()
+{
+  kernel->interrupt->Halt();
+}
+
+
+int SysAdd(int op1, int op2)
+{
+  return op1 + op2;
+}
+
+void IncrementPCCounter() {
+    kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+    kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(NextPCReg));
+    kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(NextPCReg) + 4);
+}
+
+int SysReadNum() {
+  char number[13]; int i = 0;
+  for (i = 0; i < 13; ++i) number[i] = 0;
+  char c = kernel->synchConsoleIn->GetChar();
+
+  if (c == EOF || !isnumber(c)) {
+    DEBUG(dbgSys, "Inputted number is invalid.");
+    return;
+  }
+  i = 0;
+  while (c != EOF && isnumber(c)) {
+    number[i] = c;
+    i++;
+    if (i > 11) {
+      DEBUG(dbgSys, "Number exceeds integer capacity");
+      return;
+    }
+    c = kernel->synchConsoleIn->GetChar();
+    // i is now the length of inputted integer
+  }
+  bool negative = number[0] == '-';
+  int k = 0; long result = 0;
+  if (negative) k = 1;
+  while (k < i && number[k] == 0) k++;
+  for (;k < i; ++k) {
+    c = number[k];
+    if (!isdigit(c)) {
+      DEBUG(dbgSys, "Inputted number is invalid, " << c << " detected.");
+      return 0;
+    }
+    result = result * 10 + (c - '0');
+  }
+
+  if (negative) result = -result;
+  if (result < INT_MIN) result = INT_MIN;
+  else if (result > INT_MAX) result = INT_MAX;
+
+  IncrementPCCounter();
+
+  return (int)result;
+}
+
+void SysPrintNum(int number) {
+  long cover = number;
+  if (cover < 0) {
+    kernel->synchConsoleOut->PutChar('-');
+    cover = -cover;
+  }
+  string result = "";
+  while (cover > 0) {
+    result = (char)((cover % 10) + '0') + result;
+    cover /= 10;
+  }
+  for (int i = 0; i < result.length(); ++i)
+    kernel->synchConsoleOut->PutChar(result[i]);
+
+  IncrementPCCounter();
+  // SysHalt();
+}
+
+char SysReadChar() {
+  char c = kernel->synchConsoleIn->GetChar();
+  IncrementPCCounter();
+  return c;
+}
+
+void SysPrintChar(char character) {
+  kernel->synchConsoleOut->PutChar(character);
+  IncrementPCCounter();
+  // SysHalt();
+}
+
+int SysRandomNum() {
+  // srand(time(NULL));
+  IncrementPCCounter();
+  return (int)(INT_MIN + (long)rand() % (INT_MAX - INT_MIN));
+}
+
+void SysReadString(char*& buffer, int length) {
+  delete[] buffer;
+  buffer = new char[length + 1];
+  buffer[length] = '\0';
+  for (int i = 0; i < length; ++i) 
+    buffer[i] = kernel->synchConsoleIn->GetChar();
+  IncrementPCCounter();
+  // SysHalt();
+}
+
+void SysPrintString(char* buffer) {
+  int i = 0;
+  while (buffer[i] != '\0') kernel->synchConsoleOut->PutChar(buffer[i]);
+  IncrementPCCounter();
+  // SysHalt();
+}
+
+void SysPrintHelp() {
+  cout << "[ascii] and [sort] are two system calls (or functions)." << endl;
+  cout << "[ascii] allows users to see the ASCII table, including the character,"
+    << " decimal and hexadecimal values (Note that some characters cannot be printed out)." << endl;
+  cout << "[sort] allows users to input an array and sort them either ascending or descending."  << endl;
+}
+
+void SysPrintASCII() {
+  cout << "CHAR --> DEC --> HEX" << endl;
+  for (int i = 0; i <= 255; ++i) {
+    cout << (char)i << " --> " << i << " --> " << hex << i << endl;
+  }
+}
+
+void SysSort() {
+  cout << "Please input the length of the array: ";
+  int len = SysReadNum();
+  while (len == 0 || len > 100) {
+    cout << "Length of the array must be a valid non-zero integer "
+    << "(that is less than or equal to 100)." << endl;
+    cout << "Please input the length of the array: ";
+    len = SysReadNum();
+  }
+  int *arr = new int[len];
+  for (int i = 0; i < len; ++i) {
+    cout << "Please input the next integer: ";
+    arr[i] = SysReadNum();
+  }
+  bool sortAscending = true;
+  cout << "Do you want to sort this array ascending? ('y': ascending, 'n': descending) ";
+  char c = SysReadChar();
+  while (tolower(c) != 'y' && tolower(c) != 'n') {
+    cout << "Do you want to sort this array ascending? ('y': ascending, 'n': descending) ";
+    c = SysReadChar();
+  }
+  if (tolower(c) == 'n') sortAscending = false;
+  
+  bubbleSort(sortAscending, arr, len);
+  IncrementPCCounter();
+  // SysHalt();
+}
+
+void bubbleSort(bool ascending, int *&arr, int length) {
+  for (int i = 0; i < length - 1; ++i) {
+    for (int j = 1; j < length; ++j) {
+      if (ascending && arr[i] > arr[j]) swap(arr[i], arr[j]);
+      else if (!ascending && arr[i] < arr[j]) swap(arr[i], arr[j]);
+    }
+  }
+  cout << "Sorted array: " << endl;
+  for (int i = 0; i < length; ++i) cout << arr[i] << " ";
+  cout << endl;
+}
+
+bool isnumber(char c) {
+  return isdigit(c) || c == '.' || c == '-' || c == '+';
+}
+
+
+
+
+
+#endif /* ! __USERPROG_KSYSCALL_H__ */
