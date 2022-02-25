@@ -49,6 +49,17 @@
 //	is in machine.h.
 //----------------------------------------------------------------------
 
+void IncrementProgramCounter() {
+	/* set previous programm counter (debugging only)*/
+	kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+
+	/* set programm counter to next instruction (all Instructions are 4 byte wide)*/
+	kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
+	
+	/* set next programm counter for brach execution */
+	kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+}
+
 char* User2System(int virtAddr, int limit) {
 	int i, oneChar;
 	char *kernelBuf = NULL;
@@ -78,16 +89,90 @@ int System2User(int virtAddr, int len, char* buffer) {
 	return i;
 }
 
-void IncrementProgramCounter() {
-	/* set previous programm counter (debugging only)*/
-	kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+void ExAdd() {
+	DEBUG(dbgSys, "Add " << kernel->machine->ReadRegister(4) << " + " << kernel->machine->ReadRegister(5) << "\n");
+		
+	/* Process SysAdd Systemcall*/
+	int result;
+	result = SysAdd(/* int op1 */(int)kernel->machine->ReadRegister(4),
+			/* int op2 */(int)kernel->machine->ReadRegister(5));
 
-	/* set programm counter to next instruction (all Instructions are 4 byte wide)*/
-	kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
+	DEBUG(dbgSys, "Add returning with " << result << "\n");
+	/* Prepare Result */
+	kernel->machine->WriteRegister(2, (int)result);
 	
-	/* set next programm counter for brach execution */
-	kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+	/* Modify return point */
+	IncrementProgramCounter();
+
+	ASSERTNOTREACHED();
 }
+
+void ExReadNum() {
+	int num = SysReadNum();
+	kernel->machine->WriteRegister(2, num);
+	IncrementProgramCounter();
+}
+
+void ExPrintNum() {
+	int num = kernel->machine->ReadRegister(4);
+	SysPrintNum(num);
+	IncrementProgramCounter();
+}
+
+void ExReadChar() {
+	char character = SysReadChar();
+	kernel->machine->WriteRegister(2, (int)character);
+	IncrementProgramCounter();
+}
+
+void ExPrintChar() {
+	char character = (char)kernel->machine->ReadRegister(4);
+	SysPrintChar(character);
+	IncrementProgramCounter();
+}
+
+void ExRandomNum() {
+	int num = SysRandomNum();
+	kernel->machine->WriteRegister(2, num);
+	IncrementProgramCounter();
+}
+
+void ExReadString() {
+	int address = kernel->machine->ReadRegister(4);
+	int len = kernel->machine->ReadRegister(5);
+	if (len > 1000) {
+		DEBUG(dbgSys, "Inputted string is too long.");
+		SysHalt();
+	}
+	char* str = NULL;
+	SysReadString(str, len);
+	for (int i = 0; i < len; ++i) {
+		kernel->machine->WriteMem(address + i, 1, str[i]);
+	}
+	kernel->machine->WriteMem(address + len, 1, '\0');
+	if (str != NULL) delete [] str;
+	IncrementProgramCounter();
+}
+
+void ExPrintString() {
+	int address = kernel->machine->ReadRegister(4);
+	char *str = NULL; int len = 0, i; bool flag = false;
+	kernel->machine->ReadMem(address + len, 1, &i);
+	while (i != '\0' && len < 1000) {
+		len++;
+		kernel->machine->ReadMem(address + len, 1, &i);
+	}
+	str = new char[len + 1];
+	for (int k = 0; k < len; ++k) {
+		kernel->machine->ReadMem(address + k, 1, &i);
+		str[k] = (char)i;
+	}
+	str[len] = '\0';
+	SysPrintString(str);
+	delete [] str;
+	IncrementProgramCounter();
+}
+
 
 void ExceptionHandler(ExceptionType which)
 {
@@ -100,30 +185,40 @@ void ExceptionHandler(ExceptionType which)
       switch(type) {
       	case SC_Halt:
 			DEBUG(dbgSys, "Shutdown, initiated by user program.\n");
-
 			SysHalt();
-
 			ASSERTNOTREACHED();
 			break;
 
       	case SC_Add:
-			DEBUG(dbgSys, "Add " << kernel->machine->ReadRegister(4) << " + " << kernel->machine->ReadRegister(5) << "\n");
-		
-			/* Process SysAdd Systemcall*/
-			int result;
-			result = SysAdd(/* int op1 */(int)kernel->machine->ReadRegister(4),
-					/* int op2 */(int)kernel->machine->ReadRegister(5));
+			ExAdd();
+			break;
 
-			DEBUG(dbgSys, "Add returning with " << result << "\n");
-			/* Prepare Result */
-			kernel->machine->WriteRegister(2, (int)result);
-			
-			/* Modify return point */
-			IncrementProgramCounter();
+		case SC_ReadNum:
+			ExReadNum();
+			break;
 
-			return;
+		case SC_PrintNum:
+			ExPrintNum();
+			break;
+
+		case SC_ReadChar:
+			ExReadChar();
+			break;
+
+		case SC_PrintChar:
+			ExPrintChar();
+			break;
+
+		case SC_RandomNum:
+			ExRandomNum();
+			break;
 		
-			ASSERTNOTREACHED();
+		case SC_ReadString:
+			ExReadString();
+			break;
+
+		case SC_PrintString:
+			ExPrintString();
 			break;
 
       	default:

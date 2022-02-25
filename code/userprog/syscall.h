@@ -36,7 +36,13 @@
 #define SC_ThreadJoin   15
 
 #define SC_Add		42
-
+#define SC_ReadNum 43
+#define SC_PrintNum 44
+#define SC_ReadChar 45
+#define SC_PrintChar 46
+#define SC_PrintString 47
+#define SC_ReadString 48
+#define SC_RandomNum 49
 #ifndef IN_ASM
 
 /* The system call interface.  These are the operations the Nachos
@@ -105,8 +111,8 @@ typedef int OpenFileId;
  * the console device.
  */
 
-#define ConsoleInput	0  
-#define ConsoleOutput	1  
+#define _ConsoleInput	0  
+#define _ConsoleOutput	1  
  
 /* Create a Nachos file, with name "name" */
 /* Note: Create does not open the file.   */

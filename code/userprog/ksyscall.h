@@ -17,6 +17,24 @@
 #include "machine.h"
 #include <bitset>
 
+/* Helper functions */
+
+void bubbleSort(bool ascending, int *&arr, int length) {
+  for (int i = 0; i < length - 1; ++i) {
+    for (int j = 1; j < length; ++j) {
+      if (ascending && arr[i] > arr[j]) swap(arr[i], arr[j]);
+      else if (!ascending && arr[i] < arr[j]) swap(arr[i], arr[j]);
+    }
+  }
+  cout << "Sorted array: " << endl;
+  for (int i = 0; i < length; ++i) cout << arr[i] << " ";
+  cout << endl;
+}
+
+bool isnumber(char c) {
+  return isdigit(c) || c == '.' || c == '-' || c == '+';
+}
+
 
 void SysHalt()
 {
@@ -29,12 +47,6 @@ int SysAdd(int op1, int op2)
   return op1 + op2;
 }
 
-void IncrementPCCounter() {
-    kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
-    kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(NextPCReg));
-    kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(NextPCReg) + 4);
-}
-
 int SysReadNum() {
   char number[13]; int i = 0;
   for (i = 0; i < 13; ++i) number[i] = 0;
@@ -42,7 +54,7 @@ int SysReadNum() {
 
   if (c == EOF || !isnumber(c)) {
     DEBUG(dbgSys, "Inputted number is invalid.");
-    return;
+    return 0;
   }
   i = 0;
   while (c != EOF && isnumber(c)) {
@@ -50,7 +62,7 @@ int SysReadNum() {
     i++;
     if (i > 11) {
       DEBUG(dbgSys, "Number exceeds integer capacity");
-      return;
+      return 0;
     }
     c = kernel->synchConsoleIn->GetChar();
     // i is now the length of inputted integer
@@ -72,8 +84,6 @@ int SysReadNum() {
   if (result < INT_MIN) result = INT_MIN;
   else if (result > INT_MAX) result = INT_MAX;
 
-  IncrementPCCounter();
-
   return (int)result;
 }
 
@@ -91,42 +101,36 @@ void SysPrintNum(int number) {
   for (int i = 0; i < result.length(); ++i)
     kernel->synchConsoleOut->PutChar(result[i]);
 
-  IncrementPCCounter();
   // SysHalt();
 }
 
 char SysReadChar() {
   char c = kernel->synchConsoleIn->GetChar();
-  IncrementPCCounter();
   return c;
 }
 
 void SysPrintChar(char character) {
   kernel->synchConsoleOut->PutChar(character);
-  IncrementPCCounter();
   // SysHalt();
 }
 
 int SysRandomNum() {
   // srand(time(NULL));
-  IncrementPCCounter();
   return (int)(INT_MIN + (long)rand() % (INT_MAX - INT_MIN));
 }
 
 void SysReadString(char*& buffer, int length) {
-  delete[] buffer;
+  if (buffer != NULL) delete[] buffer;
   buffer = new char[length + 1];
   buffer[length] = '\0';
   for (int i = 0; i < length; ++i) 
     buffer[i] = kernel->synchConsoleIn->GetChar();
-  IncrementPCCounter();
   // SysHalt();
 }
 
 void SysPrintString(char* buffer) {
   int i = 0;
   while (buffer[i] != '\0') kernel->synchConsoleOut->PutChar(buffer[i]);
-  IncrementPCCounter();
   // SysHalt();
 }
 
@@ -168,24 +172,6 @@ void SysSort() {
   if (tolower(c) == 'n') sortAscending = false;
   
   bubbleSort(sortAscending, arr, len);
-  IncrementPCCounter();
-  // SysHalt();
-}
-
-void bubbleSort(bool ascending, int *&arr, int length) {
-  for (int i = 0; i < length - 1; ++i) {
-    for (int j = 1; j < length; ++j) {
-      if (ascending && arr[i] > arr[j]) swap(arr[i], arr[j]);
-      else if (!ascending && arr[i] < arr[j]) swap(arr[i], arr[j]);
-    }
-  }
-  cout << "Sorted array: " << endl;
-  for (int i = 0; i < length; ++i) cout << arr[i] << " ";
-  cout << endl;
-}
-
-bool isnumber(char c) {
-  return isdigit(c) || c == '.' || c == '-' || c == '+';
 }
 
 
