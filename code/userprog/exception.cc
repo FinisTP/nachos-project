@@ -195,30 +195,37 @@ void ExceptionHandler(ExceptionType which)
 
 		case SC_ReadNum:
 			ExReadNum();
+			return;
 			break;
 
 		case SC_PrintNum:
 			ExPrintNum();
+			return;
 			break;
 
 		case SC_ReadChar:
 			ExReadChar();
+			return;
 			break;
 
 		case SC_PrintChar:
 			ExPrintChar();
+			return;
 			break;
 
 		case SC_RandomNum:
 			ExRandomNum();
+			return;
 			break;
 		
 		case SC_ReadString:
 			ExReadString();
+			return;
 			break;
 
 		case SC_PrintString:
 			ExPrintString();
+			return;
 			break;
 
       	default:
