@@ -180,6 +180,15 @@ int ThreadJoin(ThreadId id);
  */
 void ThreadExit(int ExitCode);	
 
+int ReadNum();
+void PrintNum(int number);
+char ReadChar();
+void PrintChar(char character);
+int RandomNum();
+void ReadString(char* buffer, int length);
+void PrintString(char* buffer);
+
+
 #endif /* IN_ASM */
 
 #endif /* SYSCALL_H */
