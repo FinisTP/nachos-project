@@ -133,6 +133,9 @@ void ExPrintChar() {
 
 void ExRandomNum() {
 	int num = SysRandomNum();
+
+	printf("%i", num);
+
 	kernel->machine->WriteRegister(2, num);
 	IncrementProgramCounter();
 }
@@ -225,6 +228,11 @@ void ExceptionHandler(ExceptionType which)
 
 		case SC_PrintString:
 			ExPrintString();
+			return;
+			break;
+		
+		case SC_PrintASCII:
+			SysPrintASCII();
 			return;
 			break;
 

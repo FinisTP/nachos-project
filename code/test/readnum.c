@@ -5,5 +5,7 @@ int main() {
 
     number = ReadNum();
 
+    PrintNum(number);
+
     Halt();
 }

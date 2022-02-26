@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Feb 26 17:30:14 2022
+# Make data base, printed on Sat Feb 26 18:39:02 2022
 
 # Variables
 
@@ -167,7 +167,6 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
 MAKE_VERSION := 4.1
 # environment
- 
 GNOME_DESKTOP_SESSION_ID = this-is-deprecated
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
@@ -278,6 +277,7 @@ LC_IDENTIFICATION = vi_VN.UTF-8
 # default
 .RECIPEPREFIX := 
 # environment
+ 
 LC_ADDRESS = vi_VN.UTF-8
 # environment
 LANG = C
@@ -352,6 +352,6 @@ GNUmakefile:
 # strcache performance: lookups = 19 / hit rate = 15%
 # hash-table stats:
 # Load=16/8192=0%, Rehash=0, Collisions=1/19=5%
-# Finished Make data base on Sat Feb 26 17:30:14 2022
+# Finished Make data base on Sat Feb 26 18:39:02 2022
 
  

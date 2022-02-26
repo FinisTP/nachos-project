@@ -131,7 +131,7 @@ void SysReadString(char*& buffer, int length) {
 
 void SysPrintString(char* buffer) {
   int i = 0;
-  while (buffer[i] != '\0') kernel->synchConsoleOut->PutChar(buffer[i]);
+  while (buffer[i] != '\0') kernel->synchConsoleOut->PutChar(buffer[i++]);
   // SysHalt();
 }
 
