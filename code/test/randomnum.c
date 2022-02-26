@@ -5,5 +5,7 @@ int main() {
 
     number = RandomNum();
 
+    PrintNum(number);
+
     Halt();
 }

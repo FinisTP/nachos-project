@@ -15,6 +15,7 @@
 int
 main()
 {
+    PrintASCII();
     Halt();
     /* not reached */
 }

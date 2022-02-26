@@ -186,8 +186,8 @@ ReadNum:
 	j	$31
 	.end ReadNum
 
-	.globl WriteNum
-	.ent	WriteNum
+	.globl PrintNum
+	.ent	PrintNum
 PrintNum:
 	addiu $2,$0,SC_PrintNum
 	syscall
@@ -233,6 +233,14 @@ PrintString:
 	syscall
 	j	$31
 	.end PrintString
+
+	.globl PrintASCII
+	.ent	PrintASCII
+PrintASCII:
+	addiu $2,$0,SC_PrintASCII
+	syscall
+	j	$31
+	.end PrintASCII
 
 /* dummy function to keep gcc happy */
         .globl  __main
