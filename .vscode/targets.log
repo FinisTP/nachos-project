@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Feb 26 18:39:02 2022
+# Make data base, printed on Sun Feb 27 00:04:40 2022
 
 # Variables
 
@@ -277,7 +277,6 @@ LC_IDENTIFICATION = vi_VN.UTF-8
 # default
 .RECIPEPREFIX := 
 # environment
- 
 LC_ADDRESS = vi_VN.UTF-8
 # environment
 LANG = C
@@ -348,10 +347,11 @@ GNUmakefile:
 
 # strcache buffers: 1 (0) / strings = 16 / storage = 139 B / avg = 8 B
 # current buf: size = 8162 B / used = 139 B / count = 16 / avg = 8 B
+ 
 
 # strcache performance: lookups = 19 / hit rate = 15%
 # hash-table stats:
 # Load=16/8192=0%, Rehash=0, Collisions=1/19=5%
-# Finished Make data base on Sat Feb 26 18:39:02 2022
+# Finished Make data base on Sun Feb 27 00:04:40 2022
 
  

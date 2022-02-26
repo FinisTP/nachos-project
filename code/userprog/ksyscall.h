@@ -88,6 +88,12 @@ int SysReadNum() {
 }
 
 void SysPrintNum(int number) {
+  if (number == 0) 
+  {
+    kernel->synchConsoleOut->PutChar('0');
+    return;
+  }
+
   long cover = number;
   if (cover < 0) {
     kernel->synchConsoleOut->PutChar('-');
@@ -141,10 +147,71 @@ void SysPrintHelp() {
   cout << "[sort] allows users to input an array and sort them either ascending or descending."  << endl;
 }
 
-void SysPrintASCII() {
-  cout << "CHAR --> DEC --> HEX" << endl;
-  for (int i = 0; i <= 255; ++i) {
-    cout << (char)i << " --> " << i << " --> " << hex << i << endl;
+void SysPrintHex(int num)
+{
+  int hexDigit2 = num & 0xF;
+  int hexDigit1 = num >> 4;
+
+  switch (hexDigit1)
+  {
+  case 10:
+    SysPrintChar('A');
+    break;
+  case 11:
+    SysPrintChar('B');
+    break;
+  case 12:
+    SysPrintChar('C');
+    break;
+  case 13:
+    SysPrintChar('D');
+    break;
+  case 14:
+    SysPrintChar('E');
+    break;
+  case 15:
+    SysPrintChar('F');
+    break;
+  default:
+    SysPrintNum(hexDigit1);
+    break;
+  }
+  switch (hexDigit2)
+  {
+  case 10:
+    SysPrintChar('A');
+    break;
+  case 11:
+    SysPrintChar('B');
+    break;
+  case 12:
+    SysPrintChar('C');
+    break;
+  case 13:
+    SysPrintChar('D');
+    break;
+  case 14:
+    SysPrintChar('E');
+    break;
+  case 15:
+    SysPrintChar('F');
+    break;
+  default:
+    SysPrintNum(hexDigit2);
+    break;
+  }
+}
+
+void SysPrintASCII() 
+{
+  SysPrintString("CHAR --> DEC --> HEX\n");
+  for (int i = 33; i <= 126; ++i) {
+    SysPrintChar((char)i);
+    SysPrintString(" --> ");
+    SysPrintNum(i);
+    SysPrintString(" --> ");
+    SysPrintHex(i);
+    SysPrintChar('\n');
   }
 }
 

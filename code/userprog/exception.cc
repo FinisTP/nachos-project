@@ -159,7 +159,7 @@ void ExReadString() {
 
 void ExPrintString() {
 	int address = kernel->machine->ReadRegister(4);
-	char *str = NULL; int len = 0, i; bool flag = false;
+	char *str = NULL; int len = 0, i; 
 	kernel->machine->ReadMem(address + len, 1, &i);
 	while (i != '\0' && len < 1000) {
 		len++;
@@ -176,6 +176,11 @@ void ExPrintString() {
 	IncrementProgramCounter();
 }
 
+void ExPrintASCII()
+{
+	SysPrintASCII();
+	IncrementProgramCounter();
+}
 
 void ExceptionHandler(ExceptionType which)
 {
@@ -232,7 +237,7 @@ void ExceptionHandler(ExceptionType which)
 			break;
 		
 		case SC_PrintASCII:
-			SysPrintASCII();
+			ExPrintASCII();
 			return;
 			break;
 
