@@ -137,15 +137,16 @@ void SysPrintString(char* buffer) {
 
 void SysPrintHelp() {
   cout << "[ascii] and [sort] are two system calls (or functions)." << endl;
-  cout << "[ascii] allows users to see the ASCII table, including the character,"
-    << " decimal and hexadecimal values (Note that some characters cannot be printed out)." << endl;
+  cout << "[ascii] allows users to see the ASCII table, including the character and"
+    << " decimal values (Note that some characters cannot be printed out)." << endl;
   cout << "[sort] allows users to input an array and sort them either ascending or descending."  << endl;
 }
 
 void SysPrintASCII() {
   cout << "CHAR --> DEC --> HEX" << endl;
   for (int i = 0; i <= 255; ++i) {
-    cout << (char)i << " --> " << i << " --> " << hex << i << endl;
+    SysPrintNum(i); cout << " --> ";
+    SysPrintChar((char) i);
   }
 }
 
