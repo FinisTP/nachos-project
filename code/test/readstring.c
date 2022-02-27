@@ -5,5 +5,8 @@ int main() {
 
     ReadString(c, 5);
 
+
+    PrintString(c);
+
     Halt();
 }
