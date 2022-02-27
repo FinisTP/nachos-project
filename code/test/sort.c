@@ -1,69 +1,49 @@
-/* sort.c 
- *    Test program to sort a large number of integers.
- *
- *    Intention is to stress virtual memory system.
- *
- *    Ideally, we could read the unsorted array off of the file system,
- *	and store the result back to the file system!
- */
-
-
-/*
-#define UNIX
-#define UNIX_DEBUG
-*/
-
-#ifdef UNIX
-#include <stdio.h>
-#define Exit exit
-#else
 #include "syscall.h"
-#endif /* UNIX */
 
-#define SIZE (1024)
+#define MAX_ARRAY_SIZE 256
 
-int A[SIZE];	/* size of physical memory; with code, we'll run out of space!*/
-
-int
-main()
+int main()
 {
-    int i, j, tmp;
-
-    /* first initialize the array, in reverse sorted order */
-    for (i = 0; i < SIZE; i++) {
-        A[i] = (SIZE-1) - i;
+    int n, i, j, arr[MAX_ARRAY_SIZE], temp, sortAscending, num;
+    PrintString("Please input array size (1 <= n <= 256): ");
+    n = ReadNum();
+    if (n <= 0 || n > MAX_ARRAY_SIZE) {
+        PrintString("Inputted size is invalid.");
+        Halt();
     }
-
-    /* then sort! */
-    for (i = 0; i < SIZE; i++) {
-        for (j = 0; j < (SIZE-1); j++) {
-	   if (A[j] > A[j + 1]) {	/* out of order -> need to swap ! */
-	      tmp = A[j];
-	      A[j] = A[j + 1];
-	      A[j + 1] = tmp;
-    	   }
+    PrintString("Next, please enter numbers one by one: ");
+    for (i = 0; i < n; ++i) {
+        num = ReadNum();
+        arr[i] = num;
+    }
+    PrintString("Sort ascendingly or descendingly? (0: ascending, 1: descending)");
+    sortAscending = ReadNum();
+    if (sortAscending) {
+        for (i = 0; i < n - 1; ++i) {
+            for (j = 0; j < n - i - 1; ++j) {
+                if (arr[j] > arr[j+1]) {
+                    temp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = temp;
+                }
+            }
+        }
+    } else {
+        for (i = 0; i < n - 1; ++i) {
+            for (j = 0; j < n - i - 1; ++j) {
+                if (arr[j] < arr[j+1]) {
+                    temp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = temp;
+                }
+            }
         }
     }
 
-#ifdef UNIX_DEBUG
-    for (i=0; i<SIZE; i++) {
-        printf("%4d ", A[i]);
-	if (((i+1) % 15) == 0) {
-		printf("\n");
-        }
-        if (A[i] != i) {
-            fprintf(stderr, "Out of order A[%d] = %d\n", i, A[i]);
-            Exit(1);
-        }   
+    PrintString("Sorted array: ");
+    for (i = 0; i < n; ++i) {
+        PrintNum(arr[i]);
+        PrintChar(' ');
     }
-    printf("\n");
-#endif /* UNIX_DEBUG */
-
-    for (i=0; i<SIZE; i++) {
-        if (A[i] != i) {
-            Exit(1);
-        }   
-    }
-
-    Exit(0);
+    Halt();
 }
