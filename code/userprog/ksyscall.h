@@ -122,7 +122,8 @@ void SysPrintChar(char character) {
 
 int SysRandomNum() {
   // srand(time(NULL));
-  return (int)(INT_MIN + (long)rand() % (INT_MAX - INT_MIN));
+  // return (int)(INT_MIN + (long)rand() % (INT_MAX - INT_MIN));
+  return random() % (INT_MAX - INT_MIN) + INT_MIN;
 }
 
 void SysReadString(char*& buffer, int length) {
