@@ -19,17 +19,21 @@
 
 /* Helper functions */
 
-void bubbleSort(bool ascending, int *&arr, int length) {
-  for (int i = 0; i < length - 1; ++i) {
-    for (int j = 1; j < length; ++j) {
-      if (ascending && arr[i] > arr[j]) swap(arr[i], arr[j]);
-      else if (!ascending && arr[i] < arr[j]) swap(arr[i], arr[j]);
-    }
-  }
-  cout << "Sorted array: " << endl;
-  for (int i = 0; i < length; ++i) cout << arr[i] << " ";
-  cout << endl;
-}
+// void bubbleSort(bool ascending, int *&arr, int length) {
+//   for (int i = 0; i < length - 1; ++i) {
+//     for (int j = 1; j < length; ++j) {
+//       if (ascending && arr[i] > arr[j]) swap(arr[i], arr[j]);
+//       else if (!ascending && arr[i] < arr[j]) swap(arr[i], arr[j]);
+//     }
+//   }
+//   SysPrintString("Sorted array: \n");
+//   for (int i = 0; i < length; ++i) 
+//   {
+//     SysPrintNum(arr[i]);
+//     SysPrintChar(' ');
+//   }
+//   SysPrintChar('\n');
+// }
 
 bool isnumber(char c) {
   return isdigit(c) || c == '.' || c == '-' || c == '+';
@@ -141,114 +145,58 @@ void SysPrintString(char* buffer) {
   // SysHalt();
 }
 
-void SysPrintHelp() {
-  SysPrintChar('\n');
-  SysPrintString("<-----HELP DOCUMENT----->\n");
-  SysPrintChar('\n');
-  SysPrintString("Group members: \n");
-  SysPrintString("+ 19125064 - Tu Tan Phat\n");
-  SysPrintString("+ 19125086 - Tran Hai Duong\n");
-  SysPrintChar('\n');
-  SysPrintString("Description of the [ascii] and [sort] functions: \n");
-  SysPrintString("- [ascii] and [sort] are two system calls (or functions).\n");
-  SysPrintString("- [ascii] allows users to see the ASCII table, including the character, decimal and hexadecimal values (Note that some characters cannot be printed out).\n");
-  SysPrintString("- [sort] allows users to input an array and sort them either ascending or descending.\n");
-  SysPrintChar('\n');
-}
+// void SysPrintHelp() {
+//   SysPrintChar('\n');
+//   SysPrintString("<-----HELP DOCUMENT----->\n");
+//   SysPrintChar('\n');
+//   SysPrintString("Group members: \n");
+//   SysPrintString("+ 19125064 - Tu Tan Phat\n");
+//   SysPrintString("+ 19125086 - Tran Hai Duong\n");
+//   SysPrintChar('\n');
+//   SysPrintString("Description of the [ascii] and [sort] functions: \n");
+//   SysPrintString("- [ascii] and [sort] are two system calls (or functions).\n");
+//   SysPrintString("- [ascii] allows users to see the ASCII table, including the character, decimal and hexadecimal values (Note that some characters cannot be printed out).\n");
+//   SysPrintString("- [sort] allows users to input an array and sort them either ascending or descending.\n");
+//   SysPrintChar('\n');
+// }
 
-void SysPrintHex(int num)
-{
-  int hexDigit2 = num & 0xF;
-  int hexDigit1 = num >> 4;
+// void SysPrintASCII() 
+// {
+//   SysPrintString("CHAR --> DEC --> HEX\n");
+//   for (int i = 33; i <= 126; ++i) {
+//     SysPrintChar((char)i);
+//     SysPrintString(" --> ");
+//     SysPrintNum(i);
+//     SysPrintString(" --> ");
+//     SysPrintHex(i);
+//     SysPrintChar('\n');
+//   }
+// }
 
-  switch (hexDigit1)
-  {
-  case 10:
-    SysPrintChar('A');
-    break;
-  case 11:
-    SysPrintChar('B');
-    break;
-  case 12:
-    SysPrintChar('C');
-    break;
-  case 13:
-    SysPrintChar('D');
-    break;
-  case 14:
-    SysPrintChar('E');
-    break;
-  case 15:
-    SysPrintChar('F');
-    break;
-  default:
-    SysPrintNum(hexDigit1);
-    break;
-  }
-  switch (hexDigit2)
-  {
-  case 10:
-    SysPrintChar('A');
-    break;
-  case 11:
-    SysPrintChar('B');
-    break;
-  case 12:
-    SysPrintChar('C');
-    break;
-  case 13:
-    SysPrintChar('D');
-    break;
-  case 14:
-    SysPrintChar('E');
-    break;
-  case 15:
-    SysPrintChar('F');
-    break;
-  default:
-    SysPrintNum(hexDigit2);
-    break;
-  }
-}
-
-void SysPrintASCII() 
-{
-  SysPrintString("CHAR --> DEC --> HEX\n");
-  for (int i = 33; i <= 126; ++i) {
-    SysPrintChar((char)i);
-    SysPrintString(" --> ");
-    SysPrintNum(i);
-    SysPrintString(" --> ");
-    SysPrintHex(i);
-    SysPrintChar('\n');
-  }
-}
-
-void SysSort() {
-  cout << "Please input the length of the array: ";
-  int len = SysReadNum();
-  while (len == 0 || len > 100) {
-    cout << "Length of the array must be a valid non-zero integer "
-    << "(that is less than or equal to 100)." << endl;
-    cout << "Please input the length of the array: ";
-    len = SysReadNum();
-  }
-  int *arr = new int[len];
-  for (int i = 0; i < len; ++i) {
-    cout << "Please input the next integer: ";
-    arr[i] = SysReadNum();
-  }
-  bool sortAscending = true;
-  cout << "Do you want to sort this array ascending? ('y': ascending, 'n': descending) ";
-  char c = SysReadChar();
-  while (tolower(c) != 'y' && tolower(c) != 'n') {
-    cout << "Do you want to sort this array ascending? ('y': ascending, 'n': descending) ";
-    c = SysReadChar();
-  }
-  if (tolower(c) == 'n') sortAscending = false;
+// void SysSort() {
+//   SysPrintString("Please input the length of the array: ");
+//   int len = SysReadNum();
+//   while (len == 0 || len > 100) {
+//     SysPrintString("Length of the array must be a valid non-zero integer that is less than or equal to 100).\n");
+//     SysPrintString("Please input the length of the array: ");
+//     len = SysReadNum();
+//   }
+//   int *arr = new int[len];
+//   for (int i = 0; i < len; ++i) {
+//     SysPrintString("Please input the next integer: ");
+//     arr[i] = SysReadNum();
+//   }
+//   bool sortAscending = true;
+//   SysPrintString("Do you want to sort this array ascending? ('y': ascending, 'n': descending) ");
+//   char c = SysReadChar();
+//   while (tolower(c) != 'y' && tolower(c) != 'n') {
+//     SysPrintString("Do you want to sort this array ascending? ('y': ascending, 'n': descending) ");
+//     c = SysReadChar();
+//   }
+//   if (tolower(c) == 'n') sortAscending = false;
   
-  bubbleSort(sortAscending, arr, len);
-}
+//   bubbleSort(sortAscending, arr, len);
+// }
 
 
 

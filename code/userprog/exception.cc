@@ -176,18 +176,6 @@ void ExPrintString() {
 	IncrementProgramCounter();
 }
 
-void ExPrintASCII()
-{
-	SysPrintASCII();
-	IncrementProgramCounter();
-}
-
-void ExPrintHelp()
-{
-	SysPrintHelp();
-	IncrementProgramCounter();
-}
-
 void ExceptionHandler(ExceptionType which)
 {
     int type = kernel->machine->ReadRegister(2);
@@ -241,17 +229,7 @@ void ExceptionHandler(ExceptionType which)
 			ExPrintString();
 			return;
 			break;
-		
-		case SC_PrintHelp:
-			ExPrintHelp();
-			return;
-			break;
-
-		case SC_PrintASCII:
-			ExPrintASCII();
-			return;
-			break;
-
+			
       	default:
 			cerr << "Unexpected system call " << type << "\n";
 			break;
