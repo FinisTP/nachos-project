@@ -234,6 +234,14 @@ PrintString:
 	j	$31
 	.end PrintString
 
+	.globl PrintHelp
+	.ent	PrintHelp
+PrintHelp:
+	addiu $2,$0,SC_PrintHelp
+	syscall
+	j	$31
+	.end PrintHelp
+
 	.globl PrintASCII
 	.ent	PrintASCII
 PrintASCII:

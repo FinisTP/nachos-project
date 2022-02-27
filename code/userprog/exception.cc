@@ -182,6 +182,12 @@ void ExPrintASCII()
 	IncrementProgramCounter();
 }
 
+void ExPrintHelp()
+{
+	SysPrintHelp();
+	IncrementProgramCounter();
+}
+
 void ExceptionHandler(ExceptionType which)
 {
     int type = kernel->machine->ReadRegister(2);
@@ -236,6 +242,11 @@ void ExceptionHandler(ExceptionType which)
 			return;
 			break;
 		
+		case SC_PrintHelp:
+			ExPrintHelp();
+			return;
+			break;
+
 		case SC_PrintASCII:
 			ExPrintASCII();
 			return;

@@ -141,10 +141,18 @@ void SysPrintString(char* buffer) {
 }
 
 void SysPrintHelp() {
-  cout << "[ascii] and [sort] are two system calls (or functions)." << endl;
-  cout << "[ascii] allows users to see the ASCII table, including the character,"
-    << " decimal and hexadecimal values (Note that some characters cannot be printed out)." << endl;
-  cout << "[sort] allows users to input an array and sort them either ascending or descending."  << endl;
+  SysPrintChar('\n');
+  SysPrintString("<-----HELP DOCUMENT----->\n");
+  SysPrintChar('\n');
+  SysPrintString("Group members: \n");
+  SysPrintString("+ 19125064 - Tu Tan Phat\n");
+  SysPrintString("+ 19125086 - Tran Hai Duong\n");
+  SysPrintChar('\n');
+  SysPrintString("Description of the [ascii] and [sort] functions: \n");
+  SysPrintString("- [ascii] and [sort] are two system calls (or functions).\n");
+  SysPrintString("- [ascii] allows users to see the ASCII table, including the character, decimal and hexadecimal values (Note that some characters cannot be printed out).\n");
+  SysPrintString("- [sort] allows users to input an array and sort them either ascending or descending.\n");
+  SysPrintChar('\n');
 }
 
 void SysPrintHex(int num)

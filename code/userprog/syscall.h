@@ -43,7 +43,8 @@
 #define SC_PrintString 47
 #define SC_ReadString 48
 #define SC_RandomNum 49
-#define SC_PrintASCII 50
+#define SC_PrintHelp 50
+#define SC_PrintASCII 51
 #ifndef IN_ASM
 
 /* The system call interface.  These are the operations the Nachos
@@ -188,6 +189,7 @@ void PrintChar(char character);
 int RandomNum();
 void ReadString(char* buffer, int length);
 void PrintString(char* buffer);
+void PrintHelp();
 void PrintASCII();
 
 #endif /* IN_ASM */

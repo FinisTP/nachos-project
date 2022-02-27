@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Feb 27 00:04:40 2022
+# Make data base, printed on Sun Feb 27 11:37:35 2022
 
 # Variables
 
@@ -79,7 +79,7 @@ LESSOPEN = | /usr/bin/lesspipe %s
 # environment
 LC_NAME = vi_VN.UTF-8
 # environment
-VSCODE_CWD = /home/justindtran2001/Documents/Project1/nachos/NachOS-4.0
+VSCODE_CWD = /home/justindtran2001/Documents/TheRealOne/nachos-project
 # environment
 GSETTINGS_SCHEMA_DIR = /snap/code/88/usr/share/glib-2.0/schemas
 # default
@@ -89,7 +89,7 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/JustinMachine:@/tmp/.ICE-unix/968,unix/JustinMachine:/tmp/.ICE-unix/968
+SESSION_MANAGER = local/JustinMachine:@/tmp/.ICE-unix/983,unix/JustinMachine:/tmp/.ICE-unix/983
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -133,7 +133,7 @@ PWD = /home/justindtran2001/Documents/TheRealOne/nachos-project
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 1045
+SSH_AGENT_PID = 1060
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -191,7 +191,7 @@ SHLVL = 1
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-33c77ecf-38a2-4302-8b72-da7a307fe6aa.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-0ee144d8-efc1-478c-974b-24f6970dc5f8.sock
 # environment
 XDG_SESSION_ID = 1
 # environment
@@ -211,7 +211,7 @@ LC_TELEPHONE = vi_VN.UTF-8
 # default
 MAKE_COMMAND := make
 # environment
-OLDPWD = /home/justindtran2001/Documents/Project1/nachos
+OLDPWD = /home/justindtran2001
 # default
 .VARIABLES := 
 # automatic
@@ -235,7 +235,7 @@ LC_PAPER = vi_VN.UTF-8
 # environment
 QT_ACCESSIBILITY = 1
 # environment
-DESKTOP_AUTOSTART_ID = 1053caef974d3a717d164585716879235800000009680007
+DESKTOP_AUTOSTART_ID = 10924fbba178820e2b164593563610646800000009830007
 # environment
 TEXTDOMAINDIR = /usr/share/locale/
 # default
@@ -257,11 +257,11 @@ LC_ALL = C
 # environment
 QT4_IM_MODULE = xim
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/f02209a6_90f1_40a9_90e4_eb04059e3b45
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/bb167c0c_21c5_43aa_a3f5_06499e712c9a
 # automatic
 ^F = $(notdir $^)
 # environment
-GNOME_TERMINAL_SERVICE = :1.62
+GNOME_TERMINAL_SERVICE = :1.69
 # default
 SUFFIXES := 
 # environment
@@ -277,13 +277,14 @@ LC_IDENTIFICATION = vi_VN.UTF-8
 # default
 .RECIPEPREFIX := 
 # environment
+ 
 LC_ADDRESS = vi_VN.UTF-8
 # environment
 LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 2347
+VSCODE_PID = 2296
 # variable set hash-table stats:
 # Load=136/1024=13%, Rehash=0, Collisions=22/158=14%
 
@@ -347,11 +348,10 @@ GNUmakefile:
 
 # strcache buffers: 1 (0) / strings = 16 / storage = 139 B / avg = 8 B
 # current buf: size = 8162 B / used = 139 B / count = 16 / avg = 8 B
- 
 
 # strcache performance: lookups = 19 / hit rate = 15%
 # hash-table stats:
 # Load=16/8192=0%, Rehash=0, Collisions=1/19=5%
-# Finished Make data base on Sun Feb 27 00:04:40 2022
+# Finished Make data base on Sun Feb 27 11:37:35 2022
 
  
