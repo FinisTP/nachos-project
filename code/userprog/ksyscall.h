@@ -88,6 +88,12 @@ int SysReadNum() {
 }
 
 void SysPrintNum(int number) {
+  if (number == 0) 
+  {
+    kernel->synchConsoleOut->PutChar('0');
+    return;
+  }
+
   long cover = number;
   if (cover < 0) {
     kernel->synchConsoleOut->PutChar('-');
@@ -136,17 +142,85 @@ void SysPrintString(char* buffer) {
 }
 
 void SysPrintHelp() {
-  cout << "[ascii] and [sort] are two system calls (or functions)." << endl;
-  cout << "[ascii] allows users to see the ASCII table, including the character and"
-    << " decimal values (Note that some characters cannot be printed out)." << endl;
-  cout << "[sort] allows users to input an array and sort them either ascending or descending."  << endl;
+  SysPrintChar('\n');
+  SysPrintString("<-----HELP DOCUMENT----->\n");
+  SysPrintChar('\n');
+  SysPrintString("Group members: \n");
+  SysPrintString("+ 19125064 - Tu Tan Phat\n");
+  SysPrintString("+ 19125086 - Tran Hai Duong\n");
+  SysPrintChar('\n');
+  SysPrintString("Description of the [ascii] and [sort] functions: \n");
+  SysPrintString("- [ascii] and [sort] are two system calls (or functions).\n");
+  SysPrintString("- [ascii] allows users to see the ASCII table, including the character, decimal and hexadecimal values (Note that some characters cannot be printed out).\n");
+  SysPrintString("- [sort] allows users to input an array and sort them either ascending or descending.\n");
+  SysPrintChar('\n');
 }
 
-void SysPrintASCII() {
-  cout << "CHAR --> DEC --> HEX" << endl;
-  for (int i = 0; i <= 255; ++i) {
-    SysPrintNum(i); cout << " --> ";
-    SysPrintChar((char) i);
+void SysPrintHex(int num)
+{
+  int hexDigit2 = num & 0xF;
+  int hexDigit1 = num >> 4;
+
+  switch (hexDigit1)
+  {
+  case 10:
+    SysPrintChar('A');
+    break;
+  case 11:
+    SysPrintChar('B');
+    break;
+  case 12:
+    SysPrintChar('C');
+    break;
+  case 13:
+    SysPrintChar('D');
+    break;
+  case 14:
+    SysPrintChar('E');
+    break;
+  case 15:
+    SysPrintChar('F');
+    break;
+  default:
+    SysPrintNum(hexDigit1);
+    break;
+  }
+  switch (hexDigit2)
+  {
+  case 10:
+    SysPrintChar('A');
+    break;
+  case 11:
+    SysPrintChar('B');
+    break;
+  case 12:
+    SysPrintChar('C');
+    break;
+  case 13:
+    SysPrintChar('D');
+    break;
+  case 14:
+    SysPrintChar('E');
+    break;
+  case 15:
+    SysPrintChar('F');
+    break;
+  default:
+    SysPrintNum(hexDigit2);
+    break;
+  }
+}
+
+void SysPrintASCII() 
+{
+  SysPrintString("CHAR --> DEC --> HEX\n");
+  for (int i = 33; i <= 126; ++i) {
+    SysPrintChar((char)i);
+    SysPrintString(" --> ");
+    SysPrintNum(i);
+    SysPrintString(" --> ");
+    SysPrintHex(i);
+    SysPrintChar('\n');
   }
 }
 
