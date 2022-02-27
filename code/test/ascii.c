@@ -2,6 +2,7 @@
 
 void PrintHex(int num)
 {
+  // Converter tools from integer to hexadecimal
   int hexDigit2 = num & 0xF;
   int hexDigit1 = num >> 4;
 
@@ -58,7 +59,7 @@ void PrintHex(int num)
 int main()
 {
     int i;
-
+    // Print all the char in readable range
     PrintString("CHAR --> DEC --> HEX\n");
     for (i = 33; i <= 126; ++i)
     {

@@ -55,12 +55,13 @@ int SysReadNum() {
   char number[13]; int i = 0;
   for (i = 0; i < 13; ++i) number[i] = 0;
   char c = kernel->synchConsoleIn->GetChar();
-
+  // if there is no number inputted or it is not considered to be a number
   if (c == EOF || !isnumber(c)) {
     DEBUG(dbgSys, "Inputted number is invalid.");
     return 0;
   }
   i = 0;
+  // iterate and get more digit until end of input
   while (c != EOF && isnumber(c)) {
     number[i] = c;
     i++;
@@ -71,10 +72,12 @@ int SysReadNum() {
     c = kernel->synchConsoleIn->GetChar();
     // i is now the length of inputted integer
   }
+  // check if negative
   bool negative = number[0] == '-';
   int k = 0; long result = 0;
   if (negative) k = 1;
   while (k < i && number[k] == 0) k++;
+  // form the number using the formula result * 10 + (c - '0')
   for (;k < i; ++k) {
     c = number[k];
     if (!isdigit(c)) {
@@ -85,6 +88,7 @@ int SysReadNum() {
   }
 
   if (negative) result = -result;
+  // The result must be contained within 32-bit integer
   if (result < INT_MIN) result = INT_MIN;
   else if (result > INT_MAX) result = INT_MAX;
 
@@ -97,13 +101,15 @@ void SysPrintNum(int number) {
     kernel->synchConsoleOut->PutChar('0');
     return;
   }
-
+  // convert int to long to avoid int overflow
   long cover = number;
+  // if negative number then make it positive and print - first
   if (cover < 0) {
     kernel->synchConsoleOut->PutChar('-');
     cover = -cover;
   }
   string result = "";
+  // print digits backward
   while (cover > 0) {
     result = (char)((cover % 10) + '0') + result;
     cover /= 10;
