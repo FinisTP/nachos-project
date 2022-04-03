@@ -19,21 +19,34 @@
 
 /* Helper functions */
 
-// void bubbleSort(bool ascending, int *&arr, int length) {
-//   for (int i = 0; i < length - 1; ++i) {
-//     for (int j = 1; j < length; ++j) {
-//       if (ascending && arr[i] > arr[j]) swap(arr[i], arr[j]);
-//       else if (!ascending && arr[i] < arr[j]) swap(arr[i], arr[j]);
-//     }
-//   }
-//   SysPrintString("Sorted array: \n");
-//   for (int i = 0; i < length; ++i) 
-//   {
-//     SysPrintNum(arr[i]);
-//     SysPrintChar(' ');
-//   }
-//   SysPrintChar('\n');
-// }
+char* User2System(int virtAddr, int limit) {
+	int i, oneChar;
+	char *kernelBuf = NULL;
+
+	kernelBuf = new char[limit+1];
+	if (kernelBuf == NULL) return kernelBuf;
+
+	memset(kernelBuf, 0, limit+1);
+	for (i = 0; i < limit; ++i) {
+		kernel->machine->ReadMem(virtAddr+i,1,&oneChar);
+		kernelBuf[i] = (char)oneChar;
+		if (oneChar == 0) break;
+	}
+	return kernelBuf;
+}
+
+int System2User(int virtAddr, int len, char* buffer) {
+	if (len < 0) return -1;
+	if  (len == 0) return len;
+	int i = 0, oneChar = 0;
+	do {
+		oneChar = (int) buffer[i];
+		kernel->machine->WriteMem(virtAddr+i,1,oneChar);
+		i++;
+	} while (i < len && oneChar != 0);
+
+	return i;
+}
 
 bool isnumber(char c) {
   return isdigit(c) || c == '.' || c == '-' || c == '+';

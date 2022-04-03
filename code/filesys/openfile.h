@@ -32,6 +32,10 @@ class OpenFile {
     OpenFile(int f) { file = f; currentOffset = 0; }	// open the file
     ~OpenFile() { Close(file); }			// close the file
 
+	void Seek(int position) {
+		Lseek(file, position, 0);
+	}
+
     int ReadAt(char *into, int numBytes, int position) { 
     		Lseek(file, position, 0); 
 		return ReadPartial(file, into, numBytes); 
@@ -53,6 +57,10 @@ class OpenFile {
 		}
 
     int Length() { Lseek(file, 0, 2); return Tell(file); }
+	int CurrentPos() {
+		currentOffset = Tell(file);
+		return currentOffset;
+	}
     
   private:
     int file;

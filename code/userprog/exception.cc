@@ -60,34 +60,7 @@ void IncrementProgramCounter() {
 	kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
 }
 
-char* User2System(int virtAddr, int limit) {
-	int i, oneChar;
-	char *kernelBuf = NULL;
 
-	kernelBuf = new char[limit+1];
-	if (kernelBuf == NULL) return kernelBuf;
-
-	memset(kernelBuf, 0, limit+1);
-	for (i = 0; i < limit; ++i) {
-		kernel->machine->ReadMem(virtAddr+i,1,&oneChar);
-		kernelBuf[i] = (char)oneChar;
-		if (oneChar == 0) break;
-	}
-	return kernelBuf;
-}
-
-int System2User(int virtAddr, int len, char* buffer) {
-	if (len < 0) return -1;
-	if  (len == 0) return len;
-	int i = 0, oneChar = 0;
-	do {
-		oneChar = (int) buffer[i];
-		kernel->machine->WriteMem(virtAddr+i,1,oneChar);
-		i++;
-	} while (i < len && oneChar != 0);
-
-	return i;
-}
 
 void ExAdd() {
 	DEBUG(dbgSys, "Add " << kernel->machine->ReadRegister(4) << " + " << kernel->machine->ReadRegister(5) << "\n");
