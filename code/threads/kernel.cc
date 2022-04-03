@@ -17,6 +17,7 @@
 #include "synchconsole.h"
 #include "synchdisk.h"
 #include "post.h"
+#include "filetable.h"
 
 //----------------------------------------------------------------------
 // Kernel::Kernel
@@ -109,7 +110,10 @@ Kernel::Initialize()
     postOfficeIn = new PostOfficeInput(10);
     postOfficeOut = new PostOfficeOutput(reliability);
 
+    fileTable = new FileTable;
+
     interrupt->Enable();
+
 }
 
 //----------------------------------------------------------------------
@@ -130,6 +134,8 @@ Kernel::~Kernel()
     delete fileSystem;
     delete postOfficeIn;
     delete postOfficeOut;
+
+    delete fileTable;
     
     Exit(0);
 }

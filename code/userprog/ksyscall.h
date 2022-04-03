@@ -151,61 +151,56 @@ void SysPrintString(char* buffer) {
   // SysHalt();
 }
 
-// void SysPrintHelp() {
-//   SysPrintChar('\n');
-//   SysPrintString("<-----HELP DOCUMENT----->\n");
-//   SysPrintChar('\n');
-//   SysPrintString("Group members: \n");
-//   SysPrintString("+ 19125064 - Tu Tan Phat\n");
-//   SysPrintString("+ 19125086 - Tran Hai Duong\n");
-//   SysPrintChar('\n');
-//   SysPrintString("Description of the [ascii] and [sort] functions: \n");
-//   SysPrintString("- [ascii] and [sort] are two system calls (or functions).\n");
-//   SysPrintString("- [ascii] allows users to see the ASCII table, including the character, decimal and hexadecimal values (Note that some characters cannot be printed out).\n");
-//   SysPrintString("- [sort] allows users to input an array and sort them either ascending or descending.\n");
-//   SysPrintChar('\n');
-// }
+int SysCreate(char *fileName) {
+  return kernel->fileTable->Create(fileName);
+}
 
-// void SysPrintASCII() 
-// {
-//   SysPrintString("CHAR --> DEC --> HEX\n");
-//   for (int i = 33; i <= 126; ++i) {
-//     SysPrintChar((char)i);
-//     SysPrintString(" --> ");
-//     SysPrintNum(i);
-//     SysPrintString(" --> ");
-//     SysPrintHex(i);
-//     SysPrintChar('\n');
-//   }
-// }
+int SysRemove(char *fileName) {
+  return kernel->fileTable->Remove(fileName);
+}
 
-// void SysSort() {
-//   SysPrintString("Please input the length of the array: ");
-//   int len = SysReadNum();
-//   while (len == 0 || len > 100) {
-//     SysPrintString("Length of the array must be a valid non-zero integer that is less than or equal to 100).\n");
-//     SysPrintString("Please input the length of the array: ");
-//     len = SysReadNum();
-//   }
-//   int *arr = new int[len];
-//   for (int i = 0; i < len; ++i) {
-//     SysPrintString("Please input the next integer: ");
-//     arr[i] = SysReadNum();
-//   }
-//   bool sortAscending = true;
-//   SysPrintString("Do you want to sort this array ascending? ('y': ascending, 'n': descending) ");
-//   char c = SysReadChar();
-//   while (tolower(c) != 'y' && tolower(c) != 'n') {
-//     SysPrintString("Do you want to sort this array ascending? ('y': ascending, 'n': descending) ");
-//     c = SysReadChar();
-//   }
-//   if (tolower(c) == 'n') sortAscending = false;
-  
-//   bubbleSort(sortAscending, arr, len);
-// }
+int SysOpen(char *fileName, int openMode) {
+  return kernel->fileTable->Open(fileName, openMode);
+}
 
+int SysRead(int address, int size, int id) {
+  char *buffer = new char[size];
+	buffer = User2System(address, size);
+  int newPos, oldPos;
+	oldPos = kernel->fileTable->GetPosOfFile(id);
+	if (kernel->fileTable->Read(buffer, size, id) > 0) {
+		newPos = kernel->fileTable->GetPosOfFile(id);
+		System2User(address, size, buffer);
+		delete [] buffer;
+		return newPos - oldPos + 1;
+	} else {
+    delete [] buffer;
+    return -1;
+  }
+}
 
+int SysWrite(int address, int size, int id) {
+  char *buffer = new char[size];
+	buffer = User2System(address, size);
+  int newPos, oldPos;
+	oldPos = kernel->fileTable->GetPosOfFile(id);
+	if (kernel->fileTable->Write(buffer, size, id) > 0) {
+		newPos = kernel->fileTable->GetPosOfFile(id);
+		System2User(address, size, buffer);
+		delete [] buffer;
+		return newPos - oldPos + 1;
+	} else {
+    delete [] buffer;
+    return -1;
+  }
+}
 
+int SysSeek(int position, int id) {
+  return kernel->fileTable->Seek(position ,id);
+}
 
+int SysClose(int id) {
+  return kernel->fileTable->Close(id);
+}
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */

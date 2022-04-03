@@ -282,7 +282,7 @@ main(int argc, char **argv)
       Print(printFileName);
     }
 #endif // FILESYS_STUB
-
+    
     // finally, run an initial user program if requested to do so
     if (userProgName != NULL) {
       AddrSpace *space = new AddrSpace;

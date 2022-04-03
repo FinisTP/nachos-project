@@ -269,6 +269,7 @@ THREAD_H = ../threads/alarm.h\
 	../threads/scheduler.h\
 	../threads/switch.h\
 	../threads/synch.h\
+	../threads/filetable.h\
 	../threads/synchlist.h\
 	../threads/thread.h
 

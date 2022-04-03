@@ -176,6 +176,71 @@ void ExPrintString() {
 	IncrementProgramCounter();
 }
 
+void ExCreate() {
+	int address = kernel->machine->ReadRegister(4);
+	char *fileName = User2System(address, 256);
+
+	int res = SysCreate(fileName);
+	
+	kernel->machine->WriteRegister(2, res);
+}
+
+void ExOpen() {
+	int address = kernel->machine->ReadRegister(4);
+	int fileMode = kernel->machine->ReadRegister(5);
+	char *fileName = User2System(address, 256);
+
+	int res = SysOpen(fileName, fileMode);
+	
+	kernel->machine->WriteRegister(2, res);
+}
+
+void ExClose() {
+	int id = kernel->machine->ReadRegister(4);
+
+	int res = SysClose(id);
+	
+	kernel->machine->WriteRegister(2, res);
+}
+
+void ExSeek() {
+	int position = kernel->machine->ReadRegister(4);
+	int id = kernel->machine->ReadRegister(5);
+
+	int res = SysSeek(position, id);
+	
+	kernel->machine->WriteRegister(2, res);
+}
+
+void ExRemove() {
+	int address = kernel->machine->ReadRegister(4);
+	char *fileName = User2System(address, 256);
+
+	int res = SysRemove(fileName);
+	
+	kernel->machine->WriteRegister(2, res);
+}
+
+void ExRead() {
+	int address = kernel->machine->ReadRegister(4);
+	int size = kernel->machine->ReadRegister(5);
+	int id = kernel->machine->ReadRegister(6);
+
+	int res = SysRead(address, size, id);
+
+	kernel->machine->WriteRegister(2, res);
+}
+
+void ExWrite() {
+	int address = kernel->machine->ReadRegister(4);
+	int size = kernel->machine->ReadRegister(5);
+	int id = kernel->machine->ReadRegister(6);
+
+	int res = SysWrite(address, size, id);
+
+	kernel->machine->WriteRegister(2, res);
+}
+
 void ExceptionHandler(ExceptionType which)
 {
     int type = kernel->machine->ReadRegister(2);
@@ -227,6 +292,41 @@ void ExceptionHandler(ExceptionType which)
 
 		case SC_PrintString:
 			ExPrintString();
+			return;
+			break;
+
+		case SC_Create:
+			ExCreate();
+			return;
+			break;
+
+		case SC_Open:
+			ExOpen();
+			return;
+			break;
+
+		case SC_Close:
+			ExClose();
+			return;
+			break;
+
+		case SC_Remove:
+			ExRemove();
+			return;
+			break;
+
+		case SC_Seek:
+			ExSeek();
+			return;
+			break;
+
+		case SC_Read:
+			ExRead();
+			return;
+			break;
+
+		case SC_Write:
+			ExWrite();
 			return;
 			break;
 			

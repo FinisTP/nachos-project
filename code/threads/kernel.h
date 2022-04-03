@@ -18,6 +18,7 @@
 #include "alarm.h"
 #include "filesys.h"
 #include "machine.h"
+#include "filetable.h"
 
 class PostOfficeInput;
 class PostOfficeOutput;
@@ -56,6 +57,8 @@ class Kernel {
     FileSystem *fileSystem;     
     PostOfficeInput *postOfficeIn;
     PostOfficeOutput *postOfficeOut;
+
+    FileTable* fileTable;
 
     int hostName;               // machine identifier
 
