@@ -1,6 +1,10 @@
 {
     "makefile.extensionOutputFolder": "./.vscode",
     "files.associations": {
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "syscall.h": "c",
+        "fstream": "cpp",
+        "*.tcc": "c",
+        "sstream": "c"
     }
 }

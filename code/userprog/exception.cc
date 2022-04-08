@@ -151,21 +151,26 @@ void ExPrintString() {
 
 void ExCreate() {
 	int address = kernel->machine->ReadRegister(4);
+	// int fileMode = kernel->machine->ReadRegister(5);
 	char *fileName = User2System(address, 256);
 
 	int res = SysCreate(fileName);
 	
 	kernel->machine->WriteRegister(2, res);
+
+	IncrementProgramCounter();
 }
 
 void ExOpen() {
 	int address = kernel->machine->ReadRegister(4);
-	int fileMode = kernel->machine->ReadRegister(5);
+	// int fileMode = kernel->machine->ReadRegister(5);
 	char *fileName = User2System(address, 256);
 
-	int res = SysOpen(fileName, fileMode);
+	int res = SysOpen(fileName, 0);
 	
 	kernel->machine->WriteRegister(2, res);
+
+	IncrementProgramCounter();
 }
 
 void ExClose() {
@@ -174,6 +179,8 @@ void ExClose() {
 	int res = SysClose(id);
 	
 	kernel->machine->WriteRegister(2, res);
+
+	IncrementProgramCounter();
 }
 
 void ExSeek() {
@@ -183,6 +190,8 @@ void ExSeek() {
 	int res = SysSeek(position, id);
 	
 	kernel->machine->WriteRegister(2, res);
+
+	IncrementProgramCounter();
 }
 
 void ExRemove() {
@@ -192,6 +201,8 @@ void ExRemove() {
 	int res = SysRemove(fileName);
 	
 	kernel->machine->WriteRegister(2, res);
+
+	IncrementProgramCounter();
 }
 
 void ExRead() {
@@ -202,6 +213,8 @@ void ExRead() {
 	int res = SysRead(address, size, id);
 
 	kernel->machine->WriteRegister(2, res);
+
+	IncrementProgramCounter();
 }
 
 void ExWrite() {
@@ -212,6 +225,8 @@ void ExWrite() {
 	int res = SysWrite(address, size, id);
 
 	kernel->machine->WriteRegister(2, res);
+
+	IncrementProgramCounter();
 }
 
 void ExceptionHandler(ExceptionType which)
