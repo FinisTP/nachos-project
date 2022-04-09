@@ -183,6 +183,22 @@ int SysRead(int address, int size, int id) {
 	oldPos = kernel->fileTable->GetPosOfFile(id);
 	if (kernel->fileTable->Read(buffer, size, id) > 0) {
 		newPos = kernel->fileTable->GetPosOfFile(id);
+
+    int newSize = -1;
+    for (int i = 0; i < size; ++i) {
+      if (buffer[i] == '\0') {
+        newSize = i;
+      }
+    }
+    if (newSize > -1) {
+      char *newBuffer = new char[newSize+1];
+      for (int i = 0; i <= newSize; ++i) newBuffer[i] = buffer[i];
+      delete [] buffer; buffer = NULL;
+      buffer = new char[newSize+1];
+      strcpy(buffer, newBuffer);
+      size = newSize;
+    }
+
 		System2User(address, size, buffer);
 		delete [] buffer;
 		return newPos - oldPos + 1;
@@ -195,10 +211,27 @@ int SysRead(int address, int size, int id) {
 int SysWrite(int address, int size, int id) {
   char *buffer = new char[size];
 	buffer = User2System(address, size);
+
   int newPos, oldPos;
 	oldPos = kernel->fileTable->GetPosOfFile(id);
 	if (kernel->fileTable->Write(buffer, size, id) > 0) {
 		newPos = kernel->fileTable->GetPosOfFile(id);
+
+    int newSize = -1;
+    for (int i = 0; i < size; ++i) {
+      if (buffer[i] == '\0') {
+        newSize = i;
+      }
+    }
+    if (newSize > -1) {
+      char *newBuffer = new char[newSize+1];
+      for (int i = 0; i <= newSize; ++i) newBuffer[i] = buffer[i];
+      delete [] buffer; buffer = NULL;
+      buffer = new char[newSize+1];
+      strcpy(buffer, newBuffer);
+      size = newSize;
+    }
+
 		System2User(address, size, buffer);
 		delete [] buffer;
 		return newPos - oldPos + 1;
