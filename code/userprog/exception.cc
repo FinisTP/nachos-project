@@ -122,8 +122,6 @@ void ExReadString() {
 	}
 	int result = SysReadString(address, len);
 
-	cout << result << " LMAO" << endl;
-
 	kernel->machine->WriteRegister(2, result);
 	IncrementProgramCounter();
 }
@@ -142,6 +140,8 @@ void ExCreate() {
 
 	int res = SysCreate(fileName);
 	kernel->machine->WriteRegister(2, res);
+
+	delete fileName;
 
 	IncrementProgramCounter();
 }

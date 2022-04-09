@@ -66,72 +66,53 @@ int SysAdd(int op1, int op2)
 }
 
 int SysReadNum() {
-  char number[13]; int i = 0;
-  for (i = 0; i < 13; ++i) number[i] = 0;
-  char c = kernel->synchConsoleIn->GetChar();
-  // if there is no number inputted or it is not considered to be a number
-  if (c == EOF || !isnumber(c)) {
-    DEBUG(dbgSys, "Inputted number is invalid.");
-    return 0;
-  }
-  i = 0;
-  // iterate and get more digit until end of input
-  while (c != EOF && isnumber(c)) {
-    number[i] = c;
-    i++;
-    if (i > 11) {
-      DEBUG(dbgSys, "Number exceeds integer capacity");
-      return 0;
-    }
-    c = kernel->synchConsoleIn->GetChar();
-    // i is now the length of inputted integer
-  }
-  // check if negative
-  bool negative = number[0] == '-';
-  int k = 0; long result = 0;
-  if (negative) k = 1;
-  while (k < i && number[k] == 0) k++;
-  // form the number using the formula result * 10 + (c - '0')
-  for (;k < i; ++k) {
-    c = number[k];
-    if (!isdigit(c)) {
-      DEBUG(dbgSys, "Inputted number is invalid, " << c << " detected.");
-      return 0;
-    }
-    result = result * 10 + (c - '0');
+  bool negative = false;
+  int res = 0;
+  char inp = kernel->synchConsoleIn->GetChar();
+  while (inp == ' ') inp = kernel->synchConsoleIn->GetChar();
+
+  if (inp == '-') {
+    negative = true;
+    inp = kernel->synchConsoleIn->GetChar();
   }
 
-  if (negative) result = -result;
-  // The result must be contained within 32-bit integer
-  if (result < INT_MIN) result = INT_MIN;
-  else if (result > INT_MAX) result = INT_MAX;
+  while (true) {
+    if (inp >= '0' && inp <= '9') res = res * 10 + (int)(inp - '0');
+    else if (inp == ' ' || inp == '\n') break;
+    else return 0;
 
-  return (int)result;
+    inp = kernel->synchConsoleIn->GetChar();
+  }
+
+  if (negative) return res * (-1);
+  else return res;
 }
 
-void SysPrintNum(int number) {
-  if (number == 0) 
-  {
+void SysPrintNum(int num) {
+  if (num == 0) {
     kernel->synchConsoleOut->PutChar('0');
     return;
   }
-  // convert int to long to avoid int overflow
-  long cover = number;
-  // if negative number then make it positive and print - first
-  if (cover < 0) {
-    kernel->synchConsoleOut->PutChar('-');
-    cover = -cover;
-  }
-  string result = "";
-  // print digits backward
-  while (cover > 0) {
-    result = (char)((cover % 10) + '0') + result;
-    cover /= 10;
-  }
-  for (int i = 0; i < result.length(); ++i)
-    kernel->synchConsoleOut->PutChar(result[i]);
 
-  // SysHalt();
+  if (num < 0) {
+    kernel->synchConsoleOut->PutChar('-');
+    num = num * (-1);
+  }
+
+  int temp = num, countDigit = 0;
+  while (temp > 0) {
+    countDigit += 1;
+    temp /= 10;
+  }
+
+  char digits[11] = {0};
+  for (int i = countDigit - 1; i >= 0; --i) {
+    digits[i] = (num % 10) + '0';
+    num = num / 10;
+  }
+
+  for (int i = 0; i < countDigit; ++i)
+    kernel->synchConsoleOut->PutChar(digits[i]);
 }
 
 char SysReadChar() {
@@ -152,14 +133,14 @@ int SysRandomNum() {
 
 int SysReadString(int address, int length) {
   char *buffer;
-	int count = 0, i;
+	int count = 0, i = 0;
 
 	if (length <= 0) return -1;
 
 	buffer = new char[length + 1];
 	buffer[length] = '\0';
 
-	for (i = 0; i < length; i++)
+	for (; i < length; i++)
 	{
 		char read = kernel->synchConsoleIn->GetChar();
 		if (read == '\n' || read == '\0') break;
@@ -173,7 +154,7 @@ int SysReadString(int address, int length) {
 	System2User(address, length, buffer);
 
 	delete[] buffer;
-	return i;
+	return count;
 }
 
 int SysPrintString(int address) {
