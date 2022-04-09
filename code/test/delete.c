@@ -2,9 +2,11 @@
 
 int main()
 {
-    int res;
+    char fileName[MAX_FILE_LENGTH];
+    PrintString("Please enter the name of the file to remove: ");
+    ReadString(fileName, MAX_FILE_LENGTH);
 
-    if (Remove("GauGau.txt") == -1)
+    if (Remove(fileName) == -1)
         PrintString("Remove failed\n");
     else 
         PrintString("Successfully remove file GauGau.txt\n");

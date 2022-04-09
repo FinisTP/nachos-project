@@ -3,21 +3,18 @@
 int main()
 {
     int fileIdSrc, fileIdDes;
-    char *content;
+    char content[MAX_FILE_LENGTH];
     int lengthFileSrc, lengthFileDes, contentLength;
-    char *fileName, *fileNameNewFile;
+    char fileName[MAX_FILE_LENGTH], fileNameNewFile[MAX_FILE_LENGTH];
 
     // User enter the source file name
     PrintString("Please enter the length of the file name: ");
     lengthFileSrc = ReadNum();
     PrintString("Now the file name: ");
-    ReadString(&fileName, lengthFileSrc + 1);
-
-    PrintString(&fileName);
-    PrintChar('\n');
+    ReadString(fileName, lengthFileSrc + 1);
 
     // Open file
-    fileIdSrc = Open(&fileName);
+    fileIdSrc = Open(fileName);
 
     if (fileIdSrc == -1)
         PrintString("Open file failed\n");
@@ -29,39 +26,37 @@ int main()
         PrintString("How much characters in the file do you want to copy? ");
         contentLength = ReadNum();
 
-        if (Read(&content, contentLength, fileIdSrc) == -1)
+        if (Read(content, contentLength, fileIdSrc) == -1)
             PrintString("\nCopy failed");
         else
         {
             PrintString("\nCopy successfully\n");
-            PrintString(&content);
 
             // New file name
             PrintString("\nPlease enter the length of the new-file name: ");
             lengthFileDes = ReadNum();
             
             PrintString("Now the new-file name: ");
-            ReadString(&fileNameNewFile, lengthFileDes + 1);
+            ReadString(fileNameNewFile, lengthFileDes + 1);
             //ReadChar(); // omit the \n from user 
 
             // Create the new file
-            if (!Create(&fileNameNewFile))
+            if (!Create(fileNameNewFile))
                 PrintString("\nCreate new file failed\n");
             else
             {
                 PrintString("\nCreate new file successfully\n");
 
-                fileIdDes = Open(&fileNameNewFile);
+                fileIdDes = Open(fileNameNewFile);
 
                 if (fileIdDes == -1)
                     PrintString("\nOpen new file failed\n");
                 else
                 {
                     PrintString("\nOpen new file successfully\n");
-                    PrintString(&content);
 
                     // Copy the content into the new file
-                    if (Write(&content, contentLength, fileIdDes) == -1)
+                    if (Write(content, contentLength, fileIdDes) == -1)
                         PrintString("\nPaste failed\n");
                     else
                         PrintString("\nPaste successfully\n");

@@ -18,6 +18,10 @@
 /* system call codes -- used by the stubs to tell the kernel which system call
  * is being asked for
  */
+
+#define MAX_FILE_LENGTH 32
+#define MAX_CONTENT_LENGTH 512
+
 #define SC_Halt		0
 #define SC_Exit		1
 #define SC_Exec		2

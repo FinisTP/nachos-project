@@ -33,7 +33,15 @@ class OpenFile {
     ~OpenFile() { Close(file); }			// close the file
 
 	void Seek(int position) {
-		Lseek(file, position, 0);
+		if (position != -1) {
+			if (position >= Length()) {
+				Lseek(file, 0, 2);
+			} else {
+				Lseek(file, position, 0);
+			}
+		} else {
+			Lseek(file, 0, 2);
+		}
 	}
 
     int ReadAt(char *into, int numBytes, int position) { 

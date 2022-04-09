@@ -57,8 +57,8 @@ FileTable::~FileTable() {
     int FileTable::Remove(char* name) {
         
         int id = -1;
-        for (int i = 0; i < MAX_FILE_COUNT; ++i) {
-            if (strcmp(fileNames[i], name) == 0) {
+        for (int i = 2; i < MAX_FILE_COUNT; ++i) {
+            if (fileNames[i] != NULL && strcmp(fileNames[i], name) == 0) {
                 id = i;
                 break;
             }
@@ -90,7 +90,7 @@ FileTable::~FileTable() {
         if (id <= 1 || id >= MAX_FILE_COUNT) return -1;
         if (openFile[id] == NULL) return -1;
         openFile[id]->Seek(position);
-        return position;
+        return openFile[id]->CurrentPos();
     }
 
     int FileTable::GetPosOfFile(int id) {

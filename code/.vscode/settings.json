@@ -6,6 +6,7 @@
         "iostream": "cpp",
         "syscall.h": "c",
         "ostream": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "unordered_map": "cpp"
     }
 }
