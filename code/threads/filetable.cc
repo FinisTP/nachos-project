@@ -55,16 +55,16 @@ FileTable::~FileTable() {
     }
 
     int FileTable::Remove(char* name) {
-        /*
+        
         int id = -1;
-        for (int i = 2; i < MAX_FILE_COUNT; ++i) {
+        for (int i = 0; i < MAX_FILE_COUNT; ++i) {
             if (strcmp(fileNames[i], name) == 0) {
                 id = i;
                 break;
             }
         }
-        if (id == -1) return -1;
-        */
+        if (id != -1) return -1;
+        
         kernel->fileSystem->Remove(name);
         return 0;
     }
@@ -72,6 +72,7 @@ FileTable::~FileTable() {
     int FileTable::Read(char *buffer, int size, int id) {
         if (id <= 0 || id >= MAX_FILE_COUNT) return -1;
         if (fileMode[id] == 2) return -1;
+        if (openFile[id] == NULL) return -1;
 
         return openFile[id]->Read(buffer, size);
     }
@@ -79,6 +80,7 @@ FileTable::~FileTable() {
     int FileTable::Write(char *buffer, int size, int id) {
         if (id < 0 || id >= MAX_FILE_COUNT || id == 1) return -1;
         if (fileMode[id] == 1) return -1;
+        if (openFile[id] == NULL) return -1; 
 
         return openFile[id]->Write(buffer, size);
     }
@@ -86,11 +88,13 @@ FileTable::~FileTable() {
     int FileTable::Seek(int position, int id)
     {
         if (id <= 1 || id >= MAX_FILE_COUNT) return -1;
+        if (openFile[id] == NULL) return -1;
         openFile[id]->Seek(position);
         return position;
     }
 
     int FileTable::GetPosOfFile(int id) {
         if (id < 0 || id >= MAX_FILE_COUNT) return -1;
+        if (openFile[id] == NULL) return -1;
         return openFile[id]->CurrentPos();
     }
