@@ -121,6 +121,9 @@ void ExReadString() {
 		SysHalt();
 	}
 	int result = SysReadString(address, len);
+
+	cout << result << " LMAO" << endl;
+
 	kernel->machine->WriteRegister(2, result);
 	IncrementProgramCounter();
 }

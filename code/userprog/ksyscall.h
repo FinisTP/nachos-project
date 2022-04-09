@@ -18,7 +18,7 @@
 #include <bitset>
 
 /* Helper functions */
-#define MAX_BUFFER_SIZE 256
+#define MAX_BUFFER_SIZE 255
 
 char* User2System(int virtAddr, int limit) {
 	int i, oneChar;
@@ -154,7 +154,7 @@ int SysReadString(int address, int length) {
   char *buffer;
 	int count = 0, i;
 
-	if (length <= 0) return;
+	if (length <= 0) return -1;
 
 	buffer = new char[length + 1];
 	buffer[length] = '\0';
@@ -162,18 +162,18 @@ int SysReadString(int address, int length) {
 	for (i = 0; i < length; i++)
 	{
 		char read = kernel->synchConsoleIn->GetChar();
-		if (read == '\n') break;
+		if (read == '\n' || read == '\0') break;
 		buffer[i] = read;
 		count += 1;
 	}
 
 	buffer[i] = '\0';
+  
 
 	System2User(address, length, buffer);
 
 	delete[] buffer;
-	if (i == length) return -1;
-	else return count;
+	return i;
 }
 
 int SysPrintString(int address) {
@@ -182,8 +182,13 @@ int SysPrintString(int address) {
 
 	buffer = User2System(address, MAX_BUFFER_SIZE + 1);
 
+  cout << "HERLLO " << buffer << endl;
+
 	while (buffer[i] != '\0')
-		kernel->synchConsoleOut->PutChar(buffer[i++]);
+		{
+      kernel->synchConsoleOut->PutChar(buffer[i]);
+      i++;
+    }
 
 	delete[] buffer;
 

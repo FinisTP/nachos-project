@@ -4,6 +4,7 @@ int main()
 {
     int fileIdSrc, fileIdDes;
     char *content;
+    char *contentClone;
     int lengthFileSrc, lengthFileDes, contentLength;
     char *fileName, *fileNameNewFile;
 
@@ -12,6 +13,9 @@ int main()
     lengthFileSrc = ReadNum();
     PrintString("Now the file name: ");
     ReadString(fileName, lengthFileSrc);
+
+    PrintString(fileName);
+    PrintChar('\n');
 
     // Open file
     fileIdSrc = Open(fileName);
@@ -33,6 +37,7 @@ int main()
         else
         {
             PrintString("\nCopy successfully\n");
+            PrintString(content);
 
             // New file name
             PrintString("\nPlease enter the length of the new-file name: ");
@@ -40,10 +45,10 @@ int main()
             PrintString("Now the new-file name: ");
             ReadString(fileNameNewFile, lengthFileDes);
 
-            ReadChar(); // omit the \n from user
+            ReadChar(); // omit the \n from user 
 
             // Create the new file
-            if (Create(fileNameNewFile) == -1)
+            if (!Create(fileNameNewFile))
                 PrintString("\nCreate new file failed\n");
             else
             {
@@ -56,6 +61,7 @@ int main()
                 else
                 {
                     PrintString("\nOpen new file successfully\n");
+                    PrintString(content);
 
                     // Copy the content into the new file
                     if (Write(content, contentLength, fileIdDes) == -1)
