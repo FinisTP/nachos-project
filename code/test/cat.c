@@ -7,11 +7,9 @@ int main()
     int write_result;
     int res;
 
-    fileID = Open("leGiaBao.txt");
+    fileID = Open("TanPhat.txt");
 
     write_result = Write("gau gau gau", 11, fileID);
-
-
     res = Close(fileID);
 
     Halt();

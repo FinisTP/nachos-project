@@ -155,7 +155,6 @@ void ExCreate() {
 	char *fileName = User2System(address, 256);
 
 	int res = SysCreate(fileName);
-	
 	kernel->machine->WriteRegister(2, res);
 
 	IncrementProgramCounter();

@@ -4,6 +4,8 @@
         "functional": "cpp",
         "system_error": "cpp",
         "iostream": "cpp",
-        "syscall.h": "c"
+        "syscall.h": "c",
+        "ostream": "cpp",
+        "new": "cpp"
     }
 }

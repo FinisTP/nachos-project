@@ -2,24 +2,26 @@
 #include "main.h"
 
 FileTable::FileTable() {
-        openFile = new OpenFile*[MAX_FILE_COUNT];
-        fileMode = new int[MAX_FILE_COUNT];
-        openedFileMask = new Bitmap(MAX_FILE_COUNT);
-        openedFileMask->Mark(0);
-        openedFileMask->Mark(1);
-        fileNames = new char*[MAX_FILE_COUNT];
-    }
+    openFile = new OpenFile*[MAX_FILE_COUNT];
+    fileMode = new int[MAX_FILE_COUNT];
+    openedFileMask = new Bitmap(MAX_FILE_COUNT);
+    openedFileMask->Mark(0);
+    openedFileMask->Mark(1);
+    fileNames = new char*[MAX_FILE_COUNT];
+}
 
 FileTable::~FileTable() {
-        for (int i = 0; i < MAX_FILE_COUNT; ++i) {
-            delete [] openFile[i];
-            delete [] fileNames[i];
-        }
-        delete[] openFile;
-        delete[] fileMode;
-        delete[] fileNames;
-        delete[] openedFileMask;
+    for (int i = 0; i < MAX_FILE_COUNT; ++i) {
+        if (openFile[i] != NULL) delete [] openFile[i];
+        if (fileNames[i] != NULL) delete [] fileNames[i];
     }
+    
+    if (openFile != NULL) delete[] openFile;
+    if (fileMode != NULL) delete[] fileMode;
+    
+    if (fileNames != NULL) delete[] fileNames;
+    if (openedFileMask != NULL) delete openedFileMask;
+}
 
     int FileTable::Create(char* fileName) {
        bool newFile = kernel->fileSystem->Create(fileName);
@@ -42,7 +44,7 @@ FileTable::~FileTable() {
         if (id <= 1) return -1;
         bool res = openedFileMask->Test(id);
         if (!res) return -1;
-        kernel->fileSystem->Remove(fileNames[id]);
+        // kernel->fileSystem->Remove(fileNames[id]);
         delete openFile[id];
         delete [] fileNames[id];
         fileMode[id] = -1;
@@ -53,6 +55,7 @@ FileTable::~FileTable() {
     }
 
     int FileTable::Remove(char* name) {
+        /*
         int id = -1;
         for (int i = 2; i < MAX_FILE_COUNT; ++i) {
             if (strcmp(fileNames[i], name) == 0) {
@@ -61,7 +64,9 @@ FileTable::~FileTable() {
             }
         }
         if (id == -1) return -1;
-        return Close(id);
+        */
+        kernel->fileSystem->Remove(name);
+        return 0;
     }
 
     int FileTable::Read(char *buffer, int size, int id) {
