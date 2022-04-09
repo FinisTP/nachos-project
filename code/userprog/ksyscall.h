@@ -182,8 +182,6 @@ int SysPrintString(int address) {
 
 	buffer = User2System(address, MAX_BUFFER_SIZE + 1);
 
-  cout << "HERLLO " << buffer << endl;
-
 	while (buffer[i] != '\0')
 		{
       kernel->synchConsoleOut->PutChar(buffer[i]);

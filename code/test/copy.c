@@ -26,8 +26,6 @@ int main()
     {
         PrintString("Open file successfully\n");
 
-        ReadChar(); // omit the \n from user
-
         // Get content length
         PrintString("How much characters in the file do you want to copy? ");
         contentLength = ReadNum();
@@ -45,7 +43,7 @@ int main()
             PrintString("Now the new-file name: ");
             ReadString(fileNameNewFile, lengthFileDes);
 
-            ReadChar(); // omit the \n from user 
+            //ReadChar(); // omit the \n from user 
 
             // Create the new file
             if (!Create(fileNameNewFile))
