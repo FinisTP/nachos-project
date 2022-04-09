@@ -18,6 +18,7 @@
 #include <bitset>
 
 /* Helper functions */
+#define MAX_BUFFER_SIZE 256
 
 char* User2System(int virtAddr, int limit) {
 	int i, oneChar;
@@ -149,19 +150,44 @@ int SysRandomNum() {
   return random() % (INT_MAX - INT_MIN) + INT_MIN;
 }
 
-void SysReadString(char*& buffer, int length) {
-  if (buffer != NULL) delete[] buffer;
-  buffer = new char[length + 1];
-  buffer[length] = '\0';
-  for (int i = 0; i < length; ++i) 
-    buffer[i] = kernel->synchConsoleIn->GetChar();
-  // SysHalt();
+int SysReadString(int address, int length) {
+  char *buffer;
+	int count = 0, i;
+
+	if (length <= 0) return;
+
+	buffer = new char[length + 1];
+	buffer[length] = '\0';
+
+	for (i = 0; i < length; i++)
+	{
+		char read = kernel->synchConsoleIn->GetChar();
+		if (read == '\n') break;
+		buffer[i] = read;
+		count += 1;
+	}
+
+	buffer[i] = '\0';
+
+	System2User(address, length, buffer);
+
+	delete[] buffer;
+	if (i == length) return -1;
+	else return count;
 }
 
-void SysPrintString(char* buffer) {
-  int i = 0;
-  while (buffer[i] != '\0') kernel->synchConsoleOut->PutChar(buffer[i++]);
-  // SysHalt();
+int SysPrintString(int address) {
+  char *buffer;
+	int i = 0;
+
+	buffer = User2System(address, MAX_BUFFER_SIZE + 1);
+
+	while (buffer[i] != '\0')
+		kernel->synchConsoleOut->PutChar(buffer[i++]);
+
+	delete[] buffer;
+
+	return i;
 }
 
 int SysCreate(char *fileName) {

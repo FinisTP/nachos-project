@@ -120,32 +120,15 @@ void ExReadString() {
 		DEBUG(dbgSys, "Inputted string is too long.");
 		SysHalt();
 	}
-	char* str = NULL;
-	SysReadString(str, len);
-	for (int i = 0; i < len; ++i) {
-		kernel->machine->WriteMem(address + i, 1, str[i]);
-	}
-	kernel->machine->WriteMem(address + len, 1, '\0');
-	if (str != NULL) delete [] str;
+	int result = SysReadString(address, len);
+	kernel->machine->WriteRegister(2, result);
 	IncrementProgramCounter();
 }
 
 void ExPrintString() {
 	int address = kernel->machine->ReadRegister(4);
-	char *str = NULL; int len = 0, i; 
-	kernel->machine->ReadMem(address + len, 1, &i);
-	while (i != '\0' && len < 1000) {
-		len++;
-		kernel->machine->ReadMem(address + len, 1, &i);
-	}
-	str = new char[len + 1];
-	for (int k = 0; k < len; ++k) {
-		kernel->machine->ReadMem(address + k, 1, &i);
-		str[k] = (char)i;
-	}
-	str[len] = '\0';
-	SysPrintString(str);
-	delete [] str;
+	int result = SysPrintString(address);
+	kernel->machine->WriteRegister(2, result);
 	IncrementProgramCounter();
 }
 
