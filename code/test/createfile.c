@@ -1,23 +1,24 @@
 #include "syscall.h"
-#include "copyright.h"
 
-#define MAX_FILE_LENGTH 32
+int main()
+{
+    int length;
+    char *fileName;
 
-int main() {
-    char content[MAX_FILE_LENGTH + 1];
-    int a,b;
-    if (Create("TanPhat.txt") == 1) {
-        a = Open("HaiDuong.txt");
-        b = Open("TanPhat.txt");
-        Read(content, MAX_FILE_LENGTH, a);
-        Write(content, MAX_FILE_LENGTH, b);
-        Close(a);
-        Close(b);
-        PrintString("\nCreate file successfully\n");
-        
-    } else {
-        PrintString("\nError\n");
+    PrintString("Please enter the length of the file name: ");
+    length = ReadNum();
+    PrintChar('\n');
+    PrintString("Now the file name: ");
+    ReadString(fileName, length);
+
+    if (Create(fileName) == 1)
+    {
+        PrintString("\nCreate file ");
+        PrintString(fileName);
+        PrintString(" successfully\n\n");
     }
+    else
+        PrintString("\nError: Cannot create file\n");
 
     Halt();
 }

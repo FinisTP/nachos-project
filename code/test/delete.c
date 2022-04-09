@@ -4,7 +4,10 @@ int main()
 {
     int res;
 
-    res = Remove("TanPhat.txt");
+    if (Remove("GauGau.txt") == -1)
+        PrintString("Remove failed\n");
+    else 
+        PrintString("Successfully remove file GauGau.txt\n");
 
     Halt();
 }
