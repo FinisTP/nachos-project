@@ -1,23 +1,44 @@
 #include "syscall.h"
 
+#define MAX_FILE_LENGTH 32
+
+void readUserInput(char *content)
+{
+    char c;
+    int i;
+    i = 0;
+    do
+    {
+        c = ReadChar();
+        if (c == '\n')
+        {
+            content[i] = '\0';
+            break;
+        }
+        content[i] = c;
+        ++i;
+    } while (c != '\n');
+}
+
 int main()
 {
-    int length;
-    char *fileName;
+    // Init
+    char fileName[MAX_FILE_LENGTH];
 
-    PrintString("Please enter the length of the file name: ");
-    length = ReadNum();
-    PrintChar('\n');
-    PrintString("Now the file name: ");
-    ReadString(fileName, length);
+    // Ask the user for the file name
+    PrintString("Enter the file name (maximum 32 characters): ");
+    readUserInput(fileName);
 
+    // Creating file using system call Create()
     if (Create(fileName) == 1)
     {
+        // Success
         PrintString("\nCreate file ");
         PrintString(fileName);
         PrintString(" successfully\n\n");
     }
     else
+        // Failed
         PrintString("\nError: Cannot create file\n");
 
     Halt();

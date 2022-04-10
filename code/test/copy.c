@@ -1,44 +1,54 @@
 #include "syscall.h"
 
+#define MAX_FILE_LENGTH 32
+#define MAX_CONTENT_LENGTH 160
+
+void readUserInput(char *content)
+{
+    char c;
+    int i;
+    i = 0;
+    do
+    {
+        c = ReadChar();
+        if (c == '\n')
+        {
+            content[i] = '\0';
+            break;
+        }
+        content[i] = c;
+        ++i;
+    } while (c != '\n');
+}
+
 int main()
 {
     int fileIdSrc, fileIdDes;
-    char content[MAX_FILE_LENGTH];
-    int lengthFileSrc, lengthFileDes, contentLength;
+    char content[MAX_CONTENT_LENGTH];
     char fileName[MAX_FILE_LENGTH], fileNameNewFile[MAX_FILE_LENGTH];
 
     // User enter the source file name
-    PrintString("Please enter the length of the file name: ");
-    lengthFileSrc = ReadNum();
-    PrintString("Now the file name: ");
-    ReadString(fileName, lengthFileSrc + 1);
+    PrintString("Enter the file name to copy from: ");
+    readUserInput(fileName);
 
     // Open file
     fileIdSrc = Open(fileName);
 
     if (fileIdSrc == -1)
-        PrintString("Open file failed\n");
+        PrintString("\nOpen file failed\n");
     else
     {
-        PrintString("Open file successfully\n");
+        PrintString("\nOpen file successfully\n");
 
-        // Get content length
-        PrintString("How much characters in the file do you want to copy? ");
-        contentLength = ReadNum();
-
-        if (Read(content, contentLength, fileIdSrc) == -1)
-            PrintString("\nCopy failed");
+        if (Read(content, MAX_CONTENT_LENGTH, fileIdSrc) == -1)
+            PrintString("\nCopy failed\n");
         else
         {
             PrintString("\nCopy successfully\n");
 
             // New file name
-            PrintString("\nPlease enter the length of the new-file name: ");
-            lengthFileDes = ReadNum();
-            
-            PrintString("Now the new-file name: ");
-            ReadString(fileNameNewFile, lengthFileDes + 1);
-            //ReadChar(); // omit the \n from user 
+            PrintString("\nEnter a file name for the new file: ");
+            readUserInput(fileNameNewFile);
 
             // Create the new file
             if (!Create(fileNameNewFile))
@@ -56,22 +66,22 @@ int main()
                     PrintString("\nOpen new file successfully\n");
 
                     // Copy the content into the new file
-                    if (Write(content, contentLength, fileIdDes) == -1)
-                        PrintString("\nPaste failed\n");
+                    if (Write(content, MAX_CONTENT_LENGTH, fileIdDes) == -1)
+                        PrintString("\nPaste the content into the new file failed\n");
                     else
-                        PrintString("\nPaste successfully\n");
+                        PrintString("\nPaste the content into the new file successfully\n");
 
                     if (Close(fileIdDes) == -1)
-                        PrintString("\nClose file failed\n");
+                        PrintString("\nClose the new file failed\n");
                     else
-                        PrintString("\nClose file\n");
+                        PrintString("\nClose the new file file\n");
                 }
             }
         }
         if (Close(fileIdSrc) == -1)
-            PrintString("\nClose file failed\n");
+            PrintString("\nClose the source file failed\n");
         else
-            PrintString("\nProgram executed beautifully\n");
+            PrintString("\nProgram executed beautifully\n\n");
     }
 
     Halt();
