@@ -1,7 +1,7 @@
 #include "syscall.h"
 
 #define MAX_FILE_LENGTH 32
-#define MAX_CONTENT_LENGTH 160
+#define MAX_CONTENT_LENGTH 512
 
 void readUserInput(char *content)
 {
